@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { auditTime, concatMap, debounceTime, distinctUntilChanged, exhaustMap, fromEvent, map, Observable, switchMap, tap } from 'rxjs';
+import { auditTime, concatMap, debounceTime, distinctUntilChanged, exhaustMap, fromEvent, map, Observable, switchMap, tap, filter } from 'rxjs';
 import { Categoria, Tipo, Valoracion, Lenguaje } from '../../interfaces/interfaces';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { categorias, tipos, valoraciones } from 'src/app/common/data';
@@ -54,24 +54,16 @@ print(){
       debounceTime(1000),
       tap(a =>console.log('despues del debounce',a)),
       distinctUntilChanged(),
-      //poner un switch map que llame a la funcion que cambia el valor del input
-      //en el servicio
-      tap(a =>console.log('antes de actualizar el input',a)),
+      //ejecutar la condicion de si el input es mayor a 3 caracteres
+      tap(a =>console.log('antes de filtrar el input',a)),
 
-      //switchMap((search)=>this.lenguajeService.cambiarInput(search)!),
-      switchMap((search)=>this.lenguajeService.filtradoLenguajes(search)),
-      tap(a =>console.log('despues de actualiazar el input',a)),
+      filter(input => input.length>=3),
+      tap(a =>console.log('despues de filtrar el input',a)),
 
-      //map((search)=>this.lenguajeService.filtradoLenguajes(search)),
-      tap(a =>console.log('despues de actualizar el array filtrado',a)),
-
-      tap(x=>{
-        console.log(x)
-       // console.log(this.lenguajeService.input)
-      }),
-      auditTime(1000)
+      //Hago la llamada a la función de filtrar dentro del subscribe
+      //switchMap((search)=>this.lenguajeService.filtradoLenguajes(search)),
     )
-    .subscribe()
+    .subscribe((input)=>this.lenguajeService.filtradoLenguajes(input))
   }
 
 

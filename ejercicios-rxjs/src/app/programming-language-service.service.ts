@@ -41,45 +41,34 @@ get input(): Observable<string>{
 
   constructor() { }
 
-  añadirLenguaje(lenguaje : Lenguaje){
+      añadirLenguaje(lenguaje : Lenguaje){
 
-    const dataForm = {
-      ...lenguaje,
-      id:this._id
-    }
-    this._lenguajes = [
-      ...this._lenguajes,
-      dataForm
-    ]
-    console.log(this._lenguajes)
-    this._id++;
-    localStorage.setItem('lenguajes', JSON.stringify(this._lenguajes))
-  }
-
-
-  cambiarInput(input:Observable<string>){
-    this._input=input
-      console.log('Input actualizado a:',this._input)
-      return  this._input
-  }
-
-  filtradoLenguajes(inputData:string):Lenguaje[]{
-const inputdataToLowerCase = inputData.toLowerCase()
-    console.log(inputData)
-        if(inputData !== '' && inputData.length >=3){
-          console.log('en el if')
-          this._filterLenguajes = this._lenguajes.filter(lenguaje => lenguaje.nombre.toLocaleLowerCase().includes(inputdataToLowerCase) ||
-          lenguaje.categoria.toLocaleLowerCase().includes(inputdataToLowerCase) ||
-          lenguaje.tipo.toLocaleLowerCase().includes(inputdataToLowerCase) )
-          console.log('array filtrado', this.filterLenguajes)
-          return this._filterLenguajes
-        }else{
-          console.log('en el else')
-          console.log(this._lenguajes)
-          return this._lenguajes
-
+        const dataForm = {
+          ...lenguaje,
+          id:this._id
         }
-
+        this._lenguajes = [
+          ...this._lenguajes,
+          dataForm
+        ]
+        console.log(this._lenguajes)
+        this._id++;
+        localStorage.setItem('lenguajes', JSON.stringify(this._lenguajes))
       }
 
+
+      cambiarInput(input:Observable<string>){
+        this._input=input
+          console.log('Input actualizado a:',this._input)
+          return  this._input
+      }
+
+      filtradoLenguajes(inputData:string):Lenguaje[]{
+        const inputDataToLowerCase = inputData.toLocaleLowerCase()
+        this._filterLenguajes = this._lenguajes.filter(lenguaje => lenguaje.nombre.toLocaleLowerCase().includes(inputDataToLowerCase) ||
+          lenguaje.categoria.toLocaleLowerCase().includes(inputDataToLowerCase) ||
+          lenguaje.tipo.toLocaleLowerCase().includes(inputDataToLowerCase) )
+          console.log('array filtrado', this.filterLenguajes)
+          return this._filterLenguajes
+      }
 }
