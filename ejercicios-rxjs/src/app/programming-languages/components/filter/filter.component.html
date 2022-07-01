@@ -19,40 +19,46 @@
       (click)="openModal()"
     ></button>
   </div>
-  <div [formGroup]="form">
-    <select
-      ngModel
-      name="valoracion"
-      type="number"
-      id="defaultValorationForm"
-      class="form-control mb-4 browser-default"
-      formControlName="categorySelect"
-      required
-    >
-      <option value="" disabled selected>Categorías</option>
-      <option value="todos" selected>Todos</option>
-      <option
-        *ngFor="let categoria of categorias"
-        value="{{ categoria.categoria }}"
+  <div [formGroup]="form" class="d-flex gap-3">
+    <span class="p-input-icon-right">
+      <i class="pi pi-arrow-circle-down"></i>
+      <select
+        ngModel
+        name="valoracion"
+        type="number"
+        id="defaultValorationForm"
+        class="form-control mb-4 browser-default"
+        formControlName="categorySelect"
+        required
       >
-        {{ categoria.categoria }}
-      </option>
-    </select>
-    <select
-      ngModel
-      name="valoracion"
-      type="number"
-      id="defaultValorationForm"
-      class="form-control mb-4 browser-default"
-      formControlName="typeSelect"
-      required
-    >
-      <option value="" disabled selected>Tipo</option>
-      <option value="todos" selected>Todos</option>
-      <option *ngFor="let tipo of tipos" value="{{ tipo.tipo }}">
-        {{ tipo.tipo }}
-      </option>
-    </select>
+        <option value="" disabled selected>Categorías</option>
+        <option value="Todos" selected>Todos</option>
+        <option
+          *ngFor="let categoria of categorias"
+          value="{{ categoria.categoria }}"
+        >
+          {{ categoria.categoria }}
+        </option>
+      </select>
+    </span>
+    <span class="p-input-icon-right">
+      <i class="pi pi-arrow-circle-down"></i>
+      <select
+        ngModel
+        name="valoracion"
+        type="number"
+        id="defaultValorationForm"
+        class="form-control mb-4 browser-default"
+        formControlName="typeSelect"
+        required
+      >
+        <option value="" disabled selected>Tipo</option>
+        <option value="Todos" selected>Todos</option>
+        <option *ngFor="let tipo of tipos" value="{{ tipo.tipo }}">
+          {{ tipo.tipo }}
+        </option>
+      </select>
+    </span>
 
     <!-- <div class="d-inline-block" ngbDropdown #myDrop2="ngbDropdown">
       <button
@@ -68,23 +74,27 @@
 
       </div>
     </div> -->
-    <select
-      ngModel
-      name="valoracion"
-      type="number"
-      id="defaultValorationForm"
-      class="form-control mb-4 browser-default"
-      formControlName="valorationSelect"
-      required
-    >
-      <option value="" disabled selected>Valoración</option>
-      <option value="todos" selected>Todos</option>
-      <option
-        *ngFor="let valoracion of valoraciones"
-        value="{{ valoracion.valoracion }}"
+    <span class="p-input-icon-right">
+      <i class="pi pi-arrow-circle-down"></i>
+      <select
+        ngModel
+        name="valoracion"
+        type="number"
+        id="defaultValorationForm"
+        class="form-control mb-4 browser-default"
+        formControlName="valorationSelect"
+        required
       >
-        {{ valoracion.descripcion }}
-      </option>
-    </select>
+        <i class="bi bi-arrow-down-short"></i>
+        <option value="" disabled selected>Valoración</option>
+        <option value="0" selected>Todos</option>
+        <option
+          *ngFor="let valoracion of valoraciones"
+          value="{{ valoracion.valoracion }}"
+        >
+          {{ valoracion.descripcion }}
+        </option>
+      </select>
+    </span>
   </div>
 </section>
