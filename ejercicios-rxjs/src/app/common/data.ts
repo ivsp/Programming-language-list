@@ -1,17 +1,16 @@
-import { Categoria, Lenguaje, Tipo, Valoracion } from '../programming-languages/interfaces/interfaces';
+import { Categoria, Language, Tipo, Valoracion } from '../programming-languages/interfaces/interfaces';
 
 export const categorias: Categoria[] = [
   {categoria: 'Front'},
-      {categoria: 'Back'},
-      {categoria: 'Mobile'},
-      {categoria: 'Fullstack'},
-      {categoria: 'Scripting'}
+    {categoria: 'Back'},
+    {categoria: 'Mobile'},
+    {categoria: 'Fullstack'},
+    {categoria: 'Scripting'}
 ]
-
 
 export const tipos: Tipo[] = [
   {tipo: 'Tipado'},
-    {tipo: 'No tipado'}
+  {tipo: 'No tipado'}
 ]
 
 export const valoraciones: Valoracion[]= [
@@ -27,40 +26,40 @@ export const valoraciones: Valoracion[]= [
   {valoracion: 10, descripcion: 'igual a 10'},
 ]
 
-export const datosIniciales: Lenguaje[]=[
+export const datosIniciales: Language[]=[
   {
     id: 1,
     nombre:'Java Script',
     categoria: 'Full Stack',
     tipo: 'No Tipado',
     valoracion: 7
-},
-{
+  },
+  {
   id: 2,
   nombre:'Phyton',
-  categoria: 'Backend',
+  categoria: 'No Tipado',
   tipo: 'Tipado',
   valoracion: 9
-},
-{
+  },
+  {
   id: 3,
   nombre:'Java',
   categoria: 'Backend',
   tipo: 'Tipado',
   valoracion: 8
-},
-{
+  },
+  {
   id: 4,
   nombre:'C++',
   categoria: 'Full Stack',
   tipo: 'Tipado',
   valoracion: 7
-},
-{
+  },
+  {
   id: 5,
   nombre:'PHP',
   categoria: 'Backend',
   tipo: 'No Tipado',
   valoracion: 5
-}
+  }
 ]

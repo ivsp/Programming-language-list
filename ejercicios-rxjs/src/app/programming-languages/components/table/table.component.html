@@ -6,11 +6,11 @@
     <h5 style="width: 25%">Tipo</h5>
     <h5 style="width: 12%">Valoración</h5>
   </div>
-  <div *ngFor="let lenguaje of filterLenguajes" class="table_body_container">
-    <p style="width: 12%">{{ lenguaje.id }}</p>
-    <p style="width: 25%">{{ lenguaje.nombre }}</p>
-    <p style="width: 25%">{{ lenguaje.categoria }}</p>
-    <p style="width: 25%">{{ lenguaje.tipo }}</p>
-    <p style="width: 12%">{{ lenguaje.valoracion }}</p>
+  <div *ngFor="let language of filterLanguages" class="table_body_container">
+    <p style="width: 12%">{{ language.id }}</p>
+    <p style="width: 25%">{{ language.nombre }}</p>
+    <p style="width: 25%">{{ language.categoria }}</p>
+    <p style="width: 25%">{{ language.tipo }}</p>
+    <p style="width: 12%">{{ language.valoracion }}</p>
   </div>
 </section>

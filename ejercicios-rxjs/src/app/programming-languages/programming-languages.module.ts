@@ -1,13 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { TableComponent } from './components/table/table.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { FilterComponent } from './components/filter/filter.component';
 import { AddLanguageModalComponent } from './components/add-language-modal/add-language-modal.component';
-import { FormsModule } from '@angular/forms';
-import { ProgrammingLanguageService } from '../programming-language-service.service';
+import { ProgrammingLanguageService } from '../service/programming-language-service.service';
+import { ProgrammingLanguagesComponent } from './programming-languages.component';
 
+//PrimeNG
+import {InputTextModule} from 'primeng/inputtext';
+import {ButtonModule} from 'primeng/button';
 
 
 @NgModule({
@@ -15,17 +19,24 @@ import { ProgrammingLanguageService } from '../programming-language-service.serv
     FilterComponent,
     TableComponent,
     FooterComponent,
-    AddLanguageModalComponent
+    AddLanguageModalComponent,
+    ProgrammingLanguagesComponent
   ],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    InputTextModule,
+    ButtonModule
+
 
   ],
   exports:[
     FilterComponent,
     TableComponent,
     FooterComponent,
-    AddLanguageModalComponent
+    AddLanguageModalComponent,
+    ProgrammingLanguagesComponent
 
   ],
   providers:[

@@ -1,8 +1,13 @@
 <section class="filter_container">
-  <div>
+  <div [formGroup]="form">
     <span class="p-input-icon-left">
       <i class="pi pi-search"></i>
-      <input type="text" pInputText placeholder="Search" #searchInput />
+      <input
+        type="search"
+        pInputText
+        placeholder="Search"
+        formControlName="search"
+      />
     </span>
     <button
       pButton
@@ -14,43 +19,42 @@
       (click)="openModal()"
     ></button>
   </div>
-
-  <div>
-    <div class="d-inline-block" ngbDropdown #myDrop="ngbDropdown">
-      <button
-        type="button"
-        class="btn btn-outline-primary me-2"
-        id="dropdownManual"
-        ngbDropdownAnchor
-        (focus)="myDrop.open()"
+  <div [formGroup]="form">
+    <select
+      ngModel
+      name="valoracion"
+      type="number"
+      id="defaultValorationForm"
+      class="form-control mb-4 browser-default"
+      formControlName="categorySelect"
+      required
+    >
+      <option value="" disabled selected>Categorías</option>
+      <option value="todos" selected>Todos</option>
+      <option
+        *ngFor="let categoria of categorias"
+        value="{{ categoria.categoria }}"
       >
-        Categorías
-      </button>
-      <div ngbDropdownMenu aria-labelledby="dropdownManual">
-        <button *ngFor="let categoria of categorias" ngbDropdownItem>
-          {{ categoria.categoria }}
-        </button>
-      </div>
-    </div>
+        {{ categoria.categoria }}
+      </option>
+    </select>
+    <select
+      ngModel
+      name="valoracion"
+      type="number"
+      id="defaultValorationForm"
+      class="form-control mb-4 browser-default"
+      formControlName="typeSelect"
+      required
+    >
+      <option value="" disabled selected>Tipo</option>
+      <option value="todos" selected>Todos</option>
+      <option *ngFor="let tipo of tipos" value="{{ tipo.tipo }}">
+        {{ tipo.tipo }}
+      </option>
+    </select>
 
-    <div class="d-inline-block" ngbDropdown #myDrop1="ngbDropdown">
-      <button
-        type="button"
-        class="btn btn-outline-primary me-2"
-        id="dropdownManual"
-        ngbDropdownAnchor
-        (focus)="myDrop1.open()"
-      >
-        Tipo
-      </button>
-      <div ngbDropdownMenu aria-labelledby="dropdownManual">
-        <button *ngFor="let tipo of tipos" ngbDropdownItem>
-          {{ tipo.tipo }}
-        </button>
-      </div>
-    </div>
-
-    <div class="d-inline-block" ngbDropdown #myDrop2="ngbDropdown">
+    <!-- <div class="d-inline-block" ngbDropdown #myDrop2="ngbDropdown">
       <button
         type="button"
         class="btn btn-outline-primary me-2"
@@ -61,10 +65,26 @@
         Valoración
       </button>
       <div ngbDropdownMenu aria-labelledby="dropdownManual">
-        <button *ngFor="let numero of valoracion" ngbDropdownItem>
-          {{ numero.descripcion }}
-        </button>
+
       </div>
-    </div>
+    </div> -->
+    <select
+      ngModel
+      name="valoracion"
+      type="number"
+      id="defaultValorationForm"
+      class="form-control mb-4 browser-default"
+      formControlName="valorationSelect"
+      required
+    >
+      <option value="" disabled selected>Valoración</option>
+      <option value="todos" selected>Todos</option>
+      <option
+        *ngFor="let valoracion of valoraciones"
+        value="{{ valoracion.valoracion }}"
+      >
+        {{ valoracion.descripcion }}
+      </option>
+    </select>
   </div>
 </section>
