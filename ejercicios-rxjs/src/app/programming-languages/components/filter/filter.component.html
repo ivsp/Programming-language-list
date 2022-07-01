@@ -1,0 +1,70 @@
+<section class="filter_container">
+  <div>
+    <span class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input type="text" pInputText placeholder="Search" #searchInput />
+    </span>
+    <button
+      pButton
+      type="button"
+      icon="pi pi-plus"
+      label="Añadir"
+      iconPos="left"
+      class="p-button-info p-button-raised"
+      (click)="openModal()"
+    ></button>
+  </div>
+
+  <div>
+    <div class="d-inline-block" ngbDropdown #myDrop="ngbDropdown">
+      <button
+        type="button"
+        class="btn btn-outline-primary me-2"
+        id="dropdownManual"
+        ngbDropdownAnchor
+        (focus)="myDrop.open()"
+      >
+        Categorías
+      </button>
+      <div ngbDropdownMenu aria-labelledby="dropdownManual">
+        <button *ngFor="let categoria of categorias" ngbDropdownItem>
+          {{ categoria.categoria }}
+        </button>
+      </div>
+    </div>
+
+    <div class="d-inline-block" ngbDropdown #myDrop1="ngbDropdown">
+      <button
+        type="button"
+        class="btn btn-outline-primary me-2"
+        id="dropdownManual"
+        ngbDropdownAnchor
+        (focus)="myDrop1.open()"
+      >
+        Tipo
+      </button>
+      <div ngbDropdownMenu aria-labelledby="dropdownManual">
+        <button *ngFor="let tipo of tipos" ngbDropdownItem>
+          {{ tipo.tipo }}
+        </button>
+      </div>
+    </div>
+
+    <div class="d-inline-block" ngbDropdown #myDrop2="ngbDropdown">
+      <button
+        type="button"
+        class="btn btn-outline-primary me-2"
+        id="dropdownManual"
+        ngbDropdownAnchor
+        (focus)="myDrop2.open()"
+      >
+        Valoración
+      </button>
+      <div ngbDropdownMenu aria-labelledby="dropdownManual">
+        <button *ngFor="let numero of valoracion" ngbDropdownItem>
+          {{ numero.descripcion }}
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

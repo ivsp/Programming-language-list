@@ -1,0 +1,16 @@
+<section>
+  <div class="table_header_container">
+    <h5 style="width: 12%">ID</h5>
+    <h5 style="width: 25%">Nombre</h5>
+    <h5 style="width: 25%">Categoría</h5>
+    <h5 style="width: 25%">Tipo</h5>
+    <h5 style="width: 12%">Valoración</h5>
+  </div>
+  <div *ngFor="let lenguaje of filterLenguajes" class="table_body_container">
+    <p style="width: 12%">{{ lenguaje.id }}</p>
+    <p style="width: 25%">{{ lenguaje.nombre }}</p>
+    <p style="width: 25%">{{ lenguaje.categoria }}</p>
+    <p style="width: 25%">{{ lenguaje.tipo }}</p>
+    <p style="width: 12%">{{ lenguaje.valoracion }}</p>
+  </div>
+</section>

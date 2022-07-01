@@ -1,0 +1,96 @@
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Añadir lenguaje</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <form (ngSubmit)="addNuevoLenguaje(formulario)" #formulario="ngForm">
+    <div class="modal-body">
+      <label for="defaultNameForm">Nombre:</label>
+      <!-- Nombre -->
+
+      <input
+        ngModel
+        name="nombre"
+        type="name"
+        id="defaultNameForm"
+        class="form-control mb-4"
+        placeholder="Nombre"
+        required
+      />
+      <!-- Categoría -->
+      <label for="defaultNameForm">Categoría:</label>
+
+      <input
+        ngModel
+        name="categoria"
+        type="text"
+        id="defaultCategoryForm"
+        class="form-control mb-4"
+        placeholder="Categoría"
+        required
+      />
+
+      <!-- Tipo -->
+      <label for="defaultNameForm">Tipo:</label>
+
+      <select
+        ngModel
+        name="tipo"
+        type="number"
+        id="defaultTipoForm"
+        class="form-control mb-4"
+        required
+      >
+        <option value="" disabled selected>Seleciona una opción</option>
+        <option *ngFor="let tipo of tipos" value="{{ tipo.tipo }}">
+          {{ tipo.tipo }}
+        </option>
+      </select>
+      <!-- Valoración -->
+      <label for="defaultNameForm">Valoración:</label>
+
+      <select
+        ngModel
+        name="valoracion"
+        type="number"
+        id="defaultValorationForm"
+        class="form-control mb-4"
+        required
+      >
+        <option value="" disabled selected>Seleciona una opción</option>
+        <option
+          *ngFor="let valoracion of valoraciones"
+          value="{{ valoracion.valoracion }}"
+        >
+          {{ valoracion.valoracion }}
+        </option>
+      </select>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="submit"
+        class="btn btn-primary my-4"
+        [disabled]="formulario.invalid"
+        (click)="modal.close('Close click')"
+      >
+        Añadir
+      </button>
+      <button
+        type="button"
+        class="btn btn-danger"
+        (click)="modal.close('Close click')"
+      >
+        Cerrar
+      </button>
+    </div>
+  </form>
+</ng-template>
+
+<button class="btn btn-lg btn-outline-primary" (click)="open(content)">
+  Abrir modal
+</button>
