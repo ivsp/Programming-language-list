@@ -1,7 +1,7 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { datosIniciales } from '../common/data';
 import { Language } from '../programming-languages/interfaces/interfaces';
-import { Observable, filter } from 'rxjs';
+import { Observable, filter, BehaviorSubject, map, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -14,43 +14,74 @@ export class ProgrammingLanguageService {
   private _filterLanguages: Language[] = this._languages;
   private _id: number =
     this._languages.length === 0 ? 1 : this._languages.length + 1;
-  private _input!: Observable<string>;
   private _searchValue!: string;
   private _categoryValue!: string;
   private _typeValue!: string;
   private _valorationValue!: string;
+  private _languageSubject = new BehaviorSubject<Language[]>(this._languages);
 
   /**
    * Creo un get para mandar la información de los lenguajes
    * ya que no quiero que estos lenguajes se puedan manipular desde ningun
    * otro sitio de mi aplicacion
    */
-  get languages(): Language[] {
-    return [...this._languages];
+
+  get languages$(): Observable<Language[]> {
+    return this._languageSubject.asObservable().pipe(
+      //Aquí implemento la logica para realizar el filtro de búsqueda. Paso a paso
+      //1º el filtro del input
+      map((language) => {
+        if (!this._searchValue || !this._searchValue.length) {
+          return language;
+        }
+        this._filterLanguages = this._languages.filter((language) => {
+          return `${language.nombre} ${language.categoria} ${language.tipo}`
+            .toLowerCase()
+            .includes(this._searchValue.toLowerCase());
+        });
+        return this._filterLanguages;
+      }),
+      //2º de los datos obtenidos recoger los valores para mandarselos al componente dentro de un tap()
+      //3º el filtro de los selectores realizaremos otro map()
+      map((language) => {
+        if (!this._categoryValue || !this._categoryValue.length) {
+          return language;
+        }
+        this._filterLanguages = this._filterLanguages.filter((language) => {
+          return language.categoria === this._categoryValue;
+        });
+        return this._filterLanguages;
+      }),
+      //repetir los pasos 2 y 3 tantas veces como filtros de selectores haya
+      map((language) => {
+        if (!this._typeValue || !this._typeValue.length) {
+          return language;
+        }
+        this._filterLanguages = this._filterLanguages.filter((language) => {
+          return language.tipo === this._typeValue;
+        });
+        return this._filterLanguages;
+      }),
+      tap(() => {
+        console.log('DEntro del subject', this._valorationValue);
+      }),
+      map((language) => {
+        if (!this._valorationValue || !isNaN(parseInt(this._typeValue))) {
+          console.log('En el if', this._valorationValue);
+          return language;
+        }
+        this._filterLanguages = this._filterLanguages.filter((language) => {
+          console.log('En el else', parseInt(this._valorationValue));
+
+          return language.valoracion >= parseInt(this._valorationValue);
+        });
+        return this._filterLanguages;
+      })
+    );
   }
 
   get filteredLanguages(): Language[] {
     return [...this._filterLanguages];
-  }
-
-  get input(): Observable<string> {
-    return this._input;
-  }
-
-  get searchValue(): string {
-    return this._searchValue;
-  }
-
-  get categoryValue(): string {
-    return this._categoryValue;
-  }
-
-  get typeValue(): string {
-    return this._typeValue;
-  }
-
-  get valorationValue(): string {
-    return this._valorationValue;
   }
 
   @Output() openModal: EventEmitter<any> = new EventEmitter();
@@ -68,19 +99,14 @@ export class ProgrammingLanguageService {
     localStorage.setItem('lenguajes', JSON.stringify(this._languages));
   }
 
-  filterLanguagesByName(inputData: string): Language[] {
-    const inputDataToLowerCase = inputData.toLocaleLowerCase();
-    this._filterLanguages = this._languages.filter(
-      (language) =>
-        language.nombre.toLocaleLowerCase().includes(inputDataToLowerCase) ||
-        language.categoria.toLocaleLowerCase().includes(inputDataToLowerCase) ||
-        language.tipo.toLocaleLowerCase().includes(inputDataToLowerCase)
-    );
-    console.log('array filtrado', this.filterLanguages);
-    return this._filterLanguages;
+  filterLanguagesByName(inputData: string) {
+    //función que ejecutará una función de refresco, que hará que el observable emita un nuevo valor y devolverá el input
+    this._searchValue = inputData;
+    this.refresh();
   }
 
-  filterLanguages(
+  /**
+  *  filterLanguages(
     search: string,
     category: string,
     type: string,
@@ -108,37 +134,30 @@ export class ProgrammingLanguageService {
     console.log('array filtrado', this._filterLanguages);
     return this._filterLanguages;
   }
+  *
+  */
 
-  filterSearchValue(search: string): string {
-    this._searchValue = search;
-    return this._searchValue;
-  }
-
-  filterCategory(category: string): string {
+  filterCategory(category: string) {
     if (category === 'Todos') {
       this._categoryValue = '';
-      return this._categoryValue;
     } else {
       this._categoryValue = category;
-      return this._categoryValue;
     }
+    this.refresh();
   }
 
-  filterType(type: string): string {
+  filterType(type: string) {
     if (type === 'Todos') {
       this._typeValue = '';
-      return this._typeValue;
     } else {
       this._typeValue = type;
-      return this._typeValue;
     }
+    this.refresh();
   }
 
-  filterValoration(valoration: string): string {
+  filterValoration(valoration: string) {
     this._valorationValue = valoration;
-    console.log(valoration);
-    console.log(this._valorationValue);
-    return this._valorationValue;
+    this.refresh();
   }
 
   sortByName(order: boolean) {
@@ -235,5 +254,9 @@ export class ProgrammingLanguageService {
         return 0;
       }
     });
+  }
+
+  refresh() {
+    return this._languageSubject.next(this._languages);
   }
 }

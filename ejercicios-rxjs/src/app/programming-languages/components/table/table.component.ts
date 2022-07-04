@@ -19,17 +19,7 @@ export class TableComponent implements OnInit {
   @ViewChild('valueFieldAsc') valueFieldAsc!: ElementRef;
   @ViewChild('valueFieldDes') valueFieldDes!: ElementRef;
 
-  get languages(): Language[] {
-    return this.languageService.languages;
-  }
-
-  get input(): Observable<string> {
-    return this.languageService.input;
-  }
-
-  get Languages(): Language[] {
-    return this.languageService.filteredLanguages;
-  }
+  languages$!: Observable<Language[]>;
 
   values: Valoracion[] = valoraciones;
   constructor(private languageService: ProgrammingLanguageService) {}
@@ -88,5 +78,7 @@ export class TableComponent implements OnInit {
       });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.languages$ = this.languageService.languages$;
+  }
 }

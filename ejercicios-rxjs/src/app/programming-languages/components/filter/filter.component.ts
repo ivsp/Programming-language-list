@@ -17,10 +17,6 @@ export class FilterComponent implements OnInit {
   public valoraciones: Valoracion[] = valoraciones;
   form!: FormGroup;
 
-  get searchValue(): string {
-    return this.languageService.searchValue;
-  }
-
   constructor(
     private languageService: ProgrammingLanguageService,
     private readonly builder: FormBuilder
@@ -54,77 +50,53 @@ export class FilterComponent implements OnInit {
     this.form
       .get('categorySelect')
       ?.valueChanges.pipe(
-        tap((value) =>
-          console.log('antes del filtro', this.languageService.categoryValue)
-        ),
+        tap((value) => console.log('antes del filtro', value)),
         distinctUntilChanged(),
-        map((value) => this.languageService.filterCategory(value)),
+
         tap((value) => {
-          console.log('despues del filtro', this.languageService.categoryValue);
+          console.log('despues del filtro', value);
           console.log('el valor', value);
           console.log('la prueba', this.form.get('categorySelect')?.value);
         })
       )
       .subscribe((value) => {
         console.log('new value', value);
-        this.languageService.filterLanguages(
-          this.form.get('search')?.value,
-          value,
-          this.form.get('typeSelect')?.value,
-          this.form.get('valorationSelect')?.value
+        this.languageService.filterCategory(
+          this.form.get('categorySelect')?.value
         );
       });
 
     this.form
       .get('typeSelect')
       ?.valueChanges.pipe(
-        tap(() =>
-          console.log('antes del filtro', this.languageService.typeValue)
-        ),
+        tap((value) => console.log('antes del filtro', value)),
         distinctUntilChanged(),
-        map((value) => this.languageService.filterType(value)),
         tap((value) => {
-          console.log('despues del filtro', this.languageService.typeValue);
-          console.log('el valor', value);
+          console.log('despues del filtro', value);
         })
       )
       .subscribe((value) => {
         console.log('new value', value);
-        this.languageService.filterLanguages(
-          this.form.get('search')?.value,
-          this.form.get('categorySelect')?.value,
-          value,
-          this.form.get('valorationSelect')?.value
-        );
+        this.languageService.filterType(this.form.get('typeSelect')?.value);
       });
 
     this.form
       .get('valorationSelect')
       ?.valueChanges.pipe(
         tap((value) => {
-          console.log('antes del filtro', this.languageService.valorationValue);
+          console.log('antes del filtro', value);
           console.log(value);
         }),
         distinctUntilChanged(),
-        map((value) => this.languageService.filterValoration(value)),
         tap((value) => {
-          console.log(
-            'despues del filtro',
-            this.languageService.valorationValue
-          );
-          console.log('el valor', value);
+          console.log('despues del filtro', value);
         })
       )
       .subscribe((value) => {
         console.log('new value', value);
-        this.languageService.filterLanguages(
-          this.form.get('search')?.value,
-          this.form.get('categorySelect')?.value,
-          this.form.get('typeSelect')?.value,
-          value
+        this.languageService.filterValoration(
+          this.form.get('valorationSelect')?.value
         );
       });
-
-    this.form.valueChanges.pipe().subscribe(console.log);
   }
 }
