@@ -68,8 +68,7 @@ export class ProgrammingLanguageService {
     localStorage.setItem('lenguajes', JSON.stringify(this._languages));
   }
 
-  /**
-  *  filterLanguajes(inputData: string): Language[] {
+  filterLanguajesByName(inputData: string): Language[] {
     const inputDataToLowerCase = inputData.toLocaleLowerCase();
     this._filterLanguages = this._languages.filter(
       (language) =>
@@ -80,7 +79,6 @@ export class ProgrammingLanguageService {
     console.log('array filtrado', this.filterLanguages);
     return this._filterLanguages;
   }
-  */
 
   filterLanguages(
     search: string,
@@ -91,20 +89,21 @@ export class ProgrammingLanguageService {
     console.log('busqueda', search);
     console.log('categoria', category);
     console.log('tipo', type);
-    console.log('valoracion', valoration);
+    console.log('valoracion', parseInt(valoration));
 
-    const inputDataToLowerCase = search.toLowerCase();
-    this._filterLanguages = this._languages.filter((language) =>
+    //const inputDataToLowerCase = search.toLowerCase();
+    this._filterLanguages = this._filterLanguages.filter((language) =>
       //al hacer el filtrado usando strings vacios no me devuelve ningun elemento del array
-      search !== ''
-        ? language.nombre.toLowerCase().includes(inputDataToLowerCase)
-        : '' && category !== ''
+      // search !== ''
+      //   ? language.nombre.toLowerCase().includes(inputDataToLowerCase)
+      //   : '' &&
+      category !== ''
         ? language.categoria === category
-        : '' && type !== ''
+        : language.categoria && type !== ''
         ? language.tipo === type
-        : '' && valoration !== ''
+        : language.tipo && valoration !== ''
         ? language.valoracion >= parseInt(valoration)
-        : ''
+        : language.valoracion >= 1
     );
     console.log('array filtrado', this._filterLanguages);
     return this._filterLanguages;

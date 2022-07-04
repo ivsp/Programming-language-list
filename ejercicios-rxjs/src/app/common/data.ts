@@ -9,11 +9,11 @@ export const categorias: Categoria[] = [
   { categoria: 'Front' },
   { categoria: 'Backend' },
   { categoria: 'Mobile' },
-  { categoria: 'Fullstack' },
+  { categoria: 'Full Stack' },
   { categoria: 'Scripting' },
 ];
 
-export const tipos: Tipo[] = [{ tipo: 'Tipado' }, { tipo: 'No tipado' }];
+export const tipos: Tipo[] = [{ tipo: 'Tipado' }, { tipo: 'No Tipado' }];
 
 export const valoraciones: Valoracion[] = [
   { valoracion: 1, descripcion: 'mayor que 1' },
@@ -39,7 +39,7 @@ export const datosIniciales: Language[] = [
   {
     id: 2,
     nombre: 'Phyton',
-    categoria: 'No Tipado',
+    categoria: 'Backend',
     tipo: 'Tipado',
     valoracion: 9,
   },

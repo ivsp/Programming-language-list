@@ -48,12 +48,7 @@ export class FilterComponent implements OnInit {
       )
       .subscribe((value) => {
         console.log('new value', value);
-        this.languageService.filterLanguages(
-          value,
-          this.languageService.categoryValue,
-          this.languageService.typeValue,
-          this.languageService.valorationValue
-        );
+        this.languageService.filterLanguajesByName(value);
       });
 
     this.form
@@ -67,7 +62,7 @@ export class FilterComponent implements OnInit {
         tap((value) => {
           console.log('despues del filtro', this.languageService.categoryValue);
           console.log('el valor', value);
-          console.log('la prueba', this.form.get('search')?.value);
+          console.log('la prueba', this.form.get('categorySelect')?.value);
         })
       )
       .subscribe((value) => {
