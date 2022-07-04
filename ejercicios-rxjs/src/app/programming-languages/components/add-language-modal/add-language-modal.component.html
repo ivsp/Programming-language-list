@@ -1,14 +1,9 @@
 <ng-template #content let-modal>
   <div class="modal-header">
     <h4 class="modal-title">Añadir lenguaje</h4>
-    <button
-      type="button"
-      class="btn-close"
-      aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    ></button>
+    <button type="button" class="btn-close" aria-label="Close"></button>
   </div>
-  <form (ngSubmit)="addNuevoLenguaje(formulario)" #formulario="ngForm">
+  <form (ngSubmit)="addNewLenguage(formulario)" #formulario="ngForm">
     <div class="modal-body">
       <label for="defaultNameForm">Nombre:</label>
       <!-- Nombre -->

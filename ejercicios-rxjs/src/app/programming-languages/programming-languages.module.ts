@@ -10,9 +10,9 @@ import { ProgrammingLanguageService } from '../service/programming-language-serv
 import { ProgrammingLanguagesComponent } from './programming-languages.component';
 
 //PrimeNG
-import {InputTextModule} from 'primeng/inputtext';
-import {ButtonModule} from 'primeng/button';
-
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+import { NgbDropdownModule, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -20,27 +20,24 @@ import {ButtonModule} from 'primeng/button';
     TableComponent,
     FooterComponent,
     AddLanguageModalComponent,
-    ProgrammingLanguagesComponent
+    ProgrammingLanguagesComponent,
   ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     InputTextModule,
-    ButtonModule
-
-
+    ButtonModule,
+    NgbDropdownModule,
+    NgbModalModule,
   ],
-  exports:[
+  exports: [
     FilterComponent,
     TableComponent,
     FooterComponent,
     AddLanguageModalComponent,
-    ProgrammingLanguagesComponent
-
+    ProgrammingLanguagesComponent,
   ],
-  providers:[
-    ProgrammingLanguageService
-  ]
+  providers: [ProgrammingLanguageService],
 })
-export class ProgrammingLanguagesModule { }
+export class ProgrammingLanguagesModule {}

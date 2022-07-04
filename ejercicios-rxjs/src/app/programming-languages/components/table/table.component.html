@@ -1,12 +1,108 @@
 <section>
   <div class="table_header_container">
-    <h5 style="width: 12%">ID</h5>
-    <h5 style="width: 25%">Nombre</h5>
-    <h5 style="width: 25%">Categoría</h5>
-    <h5 style="width: 25%">Tipo</h5>
-    <h5 style="width: 12%">Valoración</h5>
+    <button
+      type="button"
+      class="btn btn-outline-secondary me-2"
+      style="width: 12%"
+    >
+      ID
+    </button>
+
+    <div ngbDropdown #nameDrop="ngbDropdown" style="width: 25%">
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        id="dropdownBasic1"
+        ngbDropdownAnchor
+        (focus)="nameDrop.open()"
+      >
+        Nombre
+      </button>
+      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+        <button #nameFieldAsc ngbDropdownItem (click)="sortDataByName(true)">
+          Ascendente
+        </button>
+        <button #nameFieldDes ngbDropdownItem (click)="sortDataByName(false)">
+          Descendente
+        </button>
+      </div>
+    </div>
+
+    <div ngbDropdown #categoryDrop="ngbDropdown" style="width: 25%">
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        id="dropdownBasic1"
+        ngbDropdownAnchor
+        (focus)="categoryDrop.open()"
+      >
+        Categoría
+      </button>
+      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+        <button
+          #categoryFieldAsc
+          ngbDropdownItem
+          (click)="sortDataByCategory(true)"
+        >
+          Ascendente
+        </button>
+        <button
+          #categoryFieldDes
+          ngbDropdownItem
+          (click)="sortDataByCategory(false)"
+        >
+          Descendente
+        </button>
+      </div>
+    </div>
+    <div ngbDropdown #typeDrop="ngbDropdown" style="width: 25%">
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        id="dropdownBasic1"
+        ngbDropdownAnchor
+        (focus)="typeDrop.open()"
+      >
+        Tipo
+      </button>
+      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+        <button #typeFieldAsc ngbDropdownItem (click)="sortDataByType(true)">
+          Ascendente
+        </button>
+        <button #typeFieldDes ngbDropdownItem (click)="sortDataByType(false)">
+          Descendente
+        </button>
+      </div>
+    </div>
+    <div ngbDropdown #valorationDrop="ngbDropdown" style="width: 12%">
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        id="dropdownBasic1"
+        ngbDropdownAnchor
+        (focus)="valorationDrop.open()"
+      >
+        Tipo
+      </button>
+      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+        <button
+          #valueFieldAsc
+          ngbDropdownItem
+          (click)="sortDataByValoration(true)"
+        >
+          Ascendente
+        </button>
+        <button
+          #valueFieldDes
+          ngbDropdownItem
+          (click)="sortDataByValoration(false)"
+        >
+          Descendente
+        </button>
+      </div>
+    </div>
   </div>
-  <div *ngFor="let language of filterLanguages" class="table_body_container">
+  <div *ngFor="let language of Languages" class="table_body_container">
     <p style="width: 12%">{{ language.id }}</p>
     <p style="width: 25%">{{ language.nombre }}</p>
     <p style="width: 25%">{{ language.categoria }}</p>

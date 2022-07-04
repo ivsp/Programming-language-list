@@ -57,7 +57,7 @@ export class ProgrammingLanguageService {
 
   constructor() {}
 
-  addLanguae(languaje: Language) {
+  addLanguage(languaje: Language) {
     const dataForm = {
       ...languaje,
       id: this._id,
@@ -68,7 +68,7 @@ export class ProgrammingLanguageService {
     localStorage.setItem('lenguajes', JSON.stringify(this._languages));
   }
 
-  filterLanguajesByName(inputData: string): Language[] {
+  filterLanguagesByName(inputData: string): Language[] {
     const inputDataToLowerCase = inputData.toLocaleLowerCase();
     this._filterLanguages = this._languages.filter(
       (language) =>
@@ -92,7 +92,7 @@ export class ProgrammingLanguageService {
     console.log('valoracion', parseInt(valoration));
 
     //const inputDataToLowerCase = search.toLowerCase();
-    this._filterLanguages = this._filterLanguages.filter((language) =>
+    this._filterLanguages = this._languages.filter((language) =>
       //al hacer el filtrado usando strings vacios no me devuelve ningun elemento del array
       // search !== ''
       //   ? language.nombre.toLowerCase().includes(inputDataToLowerCase)
@@ -139,5 +139,101 @@ export class ProgrammingLanguageService {
     console.log(valoration);
     console.log(this._valorationValue);
     return this._valorationValue;
+  }
+
+  sortByName(order: boolean) {
+    this._filterLanguages = this._filterLanguages.sort(function (a, b) {
+      if (order) {
+        if (a.nombre > b.nombre) {
+          return 1;
+        }
+        if (a.nombre < b.nombre) {
+          return -1;
+        }
+        // a must be equal to b
+        return 0;
+      } else {
+        if (a.nombre > b.nombre) {
+          return -1;
+        }
+        if (a.nombre < b.nombre) {
+          return 1;
+        }
+        // a must be equal to b
+        return 0;
+      }
+    });
+  }
+
+  sortByCategory(order: boolean) {
+    this._filterLanguages = this._filterLanguages.sort(function (a, b) {
+      if (order) {
+        if (a.categoria > b.categoria) {
+          return 1;
+        }
+        if (a.categoria < b.categoria) {
+          return -1;
+        }
+        // a must be equal to b
+        return 0;
+      } else {
+        if (a.categoria > b.categoria) {
+          return -1;
+        }
+        if (a.categoria < b.categoria) {
+          return 1;
+        }
+        // a must be equal to b
+        return 0;
+      }
+    });
+  }
+
+  sortByType(order: boolean) {
+    this._filterLanguages = this._filterLanguages.sort(function (a, b) {
+      if (order) {
+        if (a.tipo > b.tipo) {
+          return 1;
+        }
+        if (a.tipo < b.tipo) {
+          return -1;
+        }
+        // a must be equal to b
+        return 0;
+      } else {
+        if (a.tipo > b.tipo) {
+          return -1;
+        }
+        if (a.tipo < b.tipo) {
+          return 1;
+        }
+        // a must be equal to b
+        return 0;
+      }
+    });
+  }
+
+  sortByValoration(order: boolean) {
+    this._filterLanguages = this._filterLanguages.sort(function (a, b) {
+      if (order) {
+        if (a.valoracion > b.valoracion) {
+          return 1;
+        }
+        if (a.valoracion < b.valoracion) {
+          return -1;
+        }
+        // a must be equal to b
+        return 0;
+      } else {
+        if (a.valoracion > b.valoracion) {
+          return -1;
+        }
+        if (a.valoracion < b.valoracion) {
+          return 1;
+        }
+        // a must be equal to b
+        return 0;
+      }
+    });
   }
 }

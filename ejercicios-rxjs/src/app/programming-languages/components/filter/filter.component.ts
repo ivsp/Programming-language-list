@@ -48,7 +48,7 @@ export class FilterComponent implements OnInit {
       )
       .subscribe((value) => {
         console.log('new value', value);
-        this.languageService.filterLanguajesByName(value);
+        this.languageService.filterLanguagesByName(value);
       });
 
     this.form

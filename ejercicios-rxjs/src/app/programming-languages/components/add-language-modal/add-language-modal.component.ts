@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import {  NgForm } from '@angular/forms';
+import { NgForm } from '@angular/forms';
 
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { categorias, tipos, valoraciones } from 'src/app/common/data';
@@ -10,32 +10,37 @@ import { Categoria, Tipo, Valoracion } from '../../interfaces/interfaces';
   selector: 'app-add-language-modal',
   templateUrl: './add-language-modal.component.html',
   encapsulation: ViewEncapsulation.None,
-  styleUrls: ['./add-language-modal.component.css']
+  styleUrls: ['./add-language-modal.component.css'],
 })
 export class AddLanguageModalComponent implements OnInit {
-
   closeResult = '';
 
-  public  categorias: Categoria[] = categorias;
-  public  tipos: Tipo[] = tipos;
-  public  valoraciones: Valoracion[] = valoraciones;
+  public categorias: Categoria[] = categorias;
+  public tipos: Tipo[] = tipos;
+  public valoraciones: Valoracion[] = valoraciones;
 
-  constructor(private modalService: NgbModal, private languageService: ProgrammingLanguageService) {  }
+  constructor(
+    private modalService: NgbModal,
+    private languageService: ProgrammingLanguageService
+  ) {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
-  addNuevoLenguaje(formulario:NgForm){
-    console.log(formulario.value)
-    this.languageService.addLanguae(formulario.value)
-    formulario.resetForm()
+  addNewLenguage(formulario: NgForm) {
+    console.log(formulario.value);
+    this.languageService.addLanguage(formulario.value);
+    formulario.resetForm();
   }
 
-  open(content:any) {
-    this.modalService.open(content, { centered: true }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+  open(content: any) {
+    this.modalService.open(content, { centered: true }).result.then(
+      (result) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      }
+    );
   }
 
   private getDismissReason(reason: any): string {
@@ -47,5 +52,4 @@ export class AddLanguageModalComponent implements OnInit {
       return `with: ${reason}`;
     }
   }
-
 }
