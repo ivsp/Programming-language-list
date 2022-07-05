@@ -12,8 +12,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   styleUrls: ['./filter.component.css'],
 })
 export class FilterComponent implements OnInit {
-  public categorias!: Category[];
-  public tipos!: Type[];
+  public categorias: Category[] = categorias;
+  public tipos: Type[] = tipos;
   public valoraciones: Valoration[] = valoraciones;
   form!: FormGroup;
 
