@@ -1,0 +1,82 @@
+<div [formGroup]="form" class="d-flex gap-3">
+  <span class="p-input-icon-right">
+    <i class="pi pi-arrow-circle-down"></i>
+    <select
+      name="valoracion"
+      type="number"
+      id="defaultValorationForm"
+      class="form-control mb-4 browser-default"
+      formControlName="categorySelect"
+      required
+    >
+      <option value="" disabled selected>Categorías</option>
+      <option value="Todos" selected>Todos</option>
+      <option
+        *ngFor="let categoria of categorias"
+        value="{{ categoria.categoria }}"
+      >
+        {{ categoria.categoria }}
+      </option>
+    </select>
+  </span>
+  <span class="p-input-icon-right">
+    <i class="pi pi-arrow-circle-down"></i>
+    <select
+      name="valoracion"
+      type="number"
+      id="defaultValorationForm"
+      class="form-control mb-4 browser-default"
+      formControlName="typeSelect"
+      required
+    >
+      <option value="" disabled selected>Tipo</option>
+      <option value="Todos" selected>Todos</option>
+      <option *ngFor="let tipo of tipos" value="{{ tipo.tipo }}">
+        {{ tipo.tipo }}
+      </option>
+    </select>
+  </span>
+
+  <!-- <div class="d-inline-block" ngbDropdown #myDrop2="ngbDropdown">
+    <button
+      type="button"
+      class="btn btn-outline-primary me-2"
+      id="dropdownManual"
+      ngbDropdownAnchor
+      (focus)="myDrop2.open()"
+    >
+      Valoración
+    </button>
+    <div ngbDropdownMenu aria-labelledby="dropdownManual">
+
+    </div>
+  </div> -->
+  <span class="p-input-icon-right d-flex align-items-center">
+    <i class="pi pi-arrow-circle-down"></i>
+    <select
+      name="valoracion"
+      type="number"
+      id="defaultValorationForm"
+      class="form-control mb-4 browser-default"
+      formControlName="valorationSelect"
+      required
+    >
+      <option value="" disabled selected>Valoración</option>
+      <option [value]="0" selected>Todos</option>
+      <option
+        *ngFor="let valoracion of valoraciones"
+        [value]="valoracion.valoracion"
+      >
+        {{ valoracion.descripcion }}
+      </option>
+    </select>
+  </span>
+  <button
+    (click)="reset()"
+    type="button"
+    class="btn btn-outline-danger"
+    style="height: 2.5rem"
+  >
+    Restablecer Filtros
+  </button>
+</div>

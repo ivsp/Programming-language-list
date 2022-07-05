@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { categorias, tipos, valoraciones } from 'src/app/common/data';
@@ -18,18 +18,33 @@ export class AddLanguageModalComponent implements OnInit {
   public categorias: Category[] = categorias;
   public tipos: Type[] = tipos;
   public valoraciones: Valoration[] = valoraciones;
+  public languageFormData!: FormGroup;
 
   constructor(
     private modalService: NgbModal,
-    private languageService: ProgrammingLanguageService
+    private languageService: ProgrammingLanguageService,
+    private readonly builder: FormBuilder
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.languageFormData = this.builder.group({
+      //['Valor inicia',validadores sincronos, validadores asincronos]
+      nombre: ['', [Validators.required, Validators.minLength(3)]],
+      categoria: ['', [Validators.required, Validators.minLength(3)]],
+      tipo: ['', Validators.required],
+      valoracion: ['', Validators.required],
+    });
+  }
 
-  addNewLenguage(formulario: NgForm) {
-    console.log(formulario.value);
-    this.languageService.addLanguage(formulario.value);
-    formulario.resetForm();
+  addNewLenguage(formData: FormGroup) {
+    if (formData.invalid) {
+      //para gestionar los errores del formulario
+      //this.languageFormData.markAllAsTouched();
+      return;
+    }
+
+    this.languageService.addLanguage(formData.value);
+    this.languageFormData.reset();
   }
 
   open(content: any) {
@@ -51,5 +66,12 @@ export class AddLanguageModalComponent implements OnInit {
     } else {
       return `with: ${reason}`;
     }
+  }
+
+  fieldIsValid(field: string) {
+    return (
+      this.languageFormData.controls[`${field}`].errors &&
+      this.languageFormData.controls[`${field}`].touched
+    );
   }
 }

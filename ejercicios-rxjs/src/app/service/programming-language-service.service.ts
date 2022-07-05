@@ -9,9 +9,8 @@ import {
   Category,
   Language,
   Type,
-  Valoration,
 } from '../programming-languages/interfaces/interfaces';
-import { Observable, filter, BehaviorSubject, map, tap } from 'rxjs';
+import { Observable, BehaviorSubject, map, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -42,23 +41,23 @@ export class ProgrammingLanguageService {
     return this._languageSubject.asObservable().pipe(
       //Aquí implemento la logica para realizar el filtro de búsqueda. Paso a paso
       //1º el filtro del input
-      map((language) => {
+      //Trabajo todo el rato sobre el ultimo elemento devuelto
+      map((languages) => {
         if (!this._searchValue || !this._searchValue.length) {
-          return language;
+          return languages;
         }
-        this._filterLanguages = this._languages.filter((language) => {
+
+        return languages.filter((language) => {
           return `${language.nombre} ${language.categoria} ${language.tipo}`
             .toLowerCase()
             .includes(this._searchValue.toLowerCase());
         });
-        return this._filterLanguages;
       }),
       //2º de los datos obtenidos recoger los valores para mandarselos al componente
       tap((languages) => {
         let newCategories: Category[] = [];
         let newTypes: Type[] = [];
         languages.map((language) => {
-          console.log(language);
           //guardo en un array las categorias disponibles y lo asigno al _aviableCategories
           newCategories.push({ categoria: language.categoria });
           newTypes.push({ tipo: language.tipo });
@@ -67,36 +66,31 @@ export class ProgrammingLanguageService {
         this._aviableTypes = newTypes;
       }),
       //3º el filtro de los selectores realizaremos otro map()
-      map((language) => {
+      map((languages) => {
         if (!this._categoryValue || !this._categoryValue.length) {
-          return language;
+          return languages;
         }
-        this._filterLanguages = this._filterLanguages.filter((language) => {
+        return languages.filter((language) => {
           return language.categoria === this._categoryValue;
         });
-        return this._filterLanguages;
       }),
       //repetir los pasos 2 y 3 tantas veces como filtros de selectores haya
-      map((language) => {
+      map((languages) => {
         if (!this._typeValue || !this._typeValue.length) {
-          return language;
+          return languages;
         }
-        this._filterLanguages = this._filterLanguages.filter((language) => {
+        return languages.filter((language) => {
           return language.tipo === this._typeValue;
         });
-        return this._filterLanguages;
       }),
       tap(() => {
-        console.log('Dentro del subject', this._valorationValue);
+        //console.log('Dentro del subject', this._valorationValue);
       }),
-      map((language) => {
+      map((languages) => {
         if (!this._valorationValue || !isNaN(parseInt(this._typeValue))) {
-          console.log('En el if', this._valorationValue);
-          return language;
+          return languages;
         }
-        this._filterLanguages = this._filterLanguages.filter((language) => {
-          console.log('En el else', parseInt(this._valorationValue));
-
+        this._filterLanguages = languages.filter((language) => {
           return language.valoracion >= parseInt(this._valorationValue);
         });
         return this._filterLanguages;
@@ -124,9 +118,9 @@ export class ProgrammingLanguageService {
       id: this._id,
     };
     this._languages = [...this._languages, dataForm];
-    console.log(this._languages);
     this._id++;
     localStorage.setItem('lenguajes', JSON.stringify(this._languages));
+    this.refresh();
   }
 
   filterLanguagesByName(inputData: string) {

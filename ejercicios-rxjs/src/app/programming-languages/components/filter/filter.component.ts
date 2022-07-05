@@ -15,7 +15,7 @@ export class FilterComponent implements OnInit {
   public categorias: Category[] = categorias;
   public tipos: Type[] = tipos;
   public valoraciones: Valoration[] = valoraciones;
-  form!: FormGroup;
+  public form!: FormGroup;
 
   constructor(
     private languageService: ProgrammingLanguageService,
@@ -23,14 +23,9 @@ export class FilterComponent implements OnInit {
   ) {}
 
   /**
-   * Para crear el array de categorias y de tipos necesito un
-   * observable al que suscribirme cada vez que este array cambia de valor
-   * y hacer la suscripcion en el html con el pipe async
+   * Aqui creo el formulario. Desde los componentes hijos emito los valores seleccionados en el formulario
+   * y los leo en este componente y me suscribo al observable desde aqui!
    */
-
-  openModal() {
-    console.log('open modal');
-  }
 
   ngOnInit() {
     this.form = this.builder.group({
@@ -40,7 +35,6 @@ export class FilterComponent implements OnInit {
       valorationSelect: [''],
     });
 
-    //El método valueChanges emite un valor del observable cada vez que el campo especificado cambia de valor
     this.form
       .get('search')
       ?.valueChanges.pipe(
@@ -49,24 +43,26 @@ export class FilterComponent implements OnInit {
         filter((value) => !value || value.length >= 3 || value.length === 0)
       )
       .subscribe((value) => {
-        console.log('new value', value);
         this.languageService.filterLanguagesByName(value);
       });
+
+    //El método valueChanges emite un valor del observable cada vez que el campo especificado cambia de valor
 
     this.form
       .get('categorySelect')
       ?.valueChanges.pipe(
-        tap((value) => console.log('antes del filtro', value)),
+        tap(),
+        //(value) => console.log('antes del filtro', value)
         distinctUntilChanged(),
 
         tap((value) => {
-          console.log('despues del filtro', value);
-          console.log('el valor', value);
-          console.log('la prueba', this.form.get('categorySelect')?.value);
+          //console.log('despues del filtro', value);
+          //console.log('el valor', value);
+          //console.log('la prueba', this.form.get('categorySelect')?.value);
         })
       )
       .subscribe((value) => {
-        console.log('new value', value);
+        //console.log('new value', value);
         this.languageService.filterCategory(
           this.form.get('categorySelect')?.value
         );
@@ -75,14 +71,16 @@ export class FilterComponent implements OnInit {
     this.form
       .get('typeSelect')
       ?.valueChanges.pipe(
-        tap((value) => console.log('antes del filtro', value)),
+        tap((value) => {
+          //console.log('antes del filtro', value)
+        }),
         distinctUntilChanged(),
         tap((value) => {
-          console.log('despues del filtro', value);
+          //console.log('despues del filtro', value);
         })
       )
       .subscribe((value) => {
-        console.log('new value', value);
+        //console.log('new value', value);
         this.languageService.filterType(this.form.get('typeSelect')?.value);
       });
 
@@ -90,32 +88,19 @@ export class FilterComponent implements OnInit {
       .get('valorationSelect')
       ?.valueChanges.pipe(
         tap((value) => {
-          console.log('antes del filtro', value);
-          console.log(value);
+          //console.log('antes del filtro', value);
+          //console.log(value);
         }),
         distinctUntilChanged(),
         tap((value) => {
-          console.log('despues del filtro', value);
+          //console.log('despues del filtro', value);
         })
       )
       .subscribe((value) => {
-        console.log('new value', value);
+        //console.log('new value', value);
         this.languageService.filterValoration(
           this.form.get('valorationSelect')?.value
         );
       });
-  }
-
-  //Función que resetea los valores del formulario y que por consecuencia,
-  //realiza la subcripción a los observables que cambian de valor, restaurando la lista inicial de datos.
-  reset(): void {
-    console.log(this.form.value);
-    this.form.reset({
-      search: '',
-      categorySelect: '',
-      typeSelect: '',
-      valorationSelect: '',
-    });
-    console.log(this.form.value);
   }
 }

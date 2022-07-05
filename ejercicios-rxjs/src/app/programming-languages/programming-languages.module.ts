@@ -13,6 +13,8 @@ import { ProgrammingLanguagesComponent } from './programming-languages.component
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { NgbDropdownModule, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { InputFilterComponent } from './components/filter/input-filter/input-filter.component';
+import { SelectorsFilterComponent } from './components/filter/selectors-filter/selectors-filter.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,8 @@ import { NgbDropdownModule, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
     FooterComponent,
     AddLanguageModalComponent,
     ProgrammingLanguagesComponent,
+    InputFilterComponent,
+    SelectorsFilterComponent,
   ],
   imports: [
     CommonModule,

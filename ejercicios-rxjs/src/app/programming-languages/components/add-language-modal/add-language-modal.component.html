@@ -3,39 +3,50 @@
     <h4 class="modal-title">Añadir lenguaje</h4>
     <button type="button" class="btn-close" aria-label="Close"></button>
   </div>
-  <form (ngSubmit)="addNewLenguage(formulario)" #formulario="ngForm">
+  <form
+    (ngSubmit)="addNewLenguage(languageFormData)"
+    [formGroup]="languageFormData"
+  >
     <div class="modal-body">
-      <label for="defaultNameForm">Nombre:</label>
-      <!-- Nombre -->
+      <div class="mb-4">
+        <label for="defaultNameForm">Nombre:</label>
+        <!-- Nombre -->
 
-      <input
-        ngModel
-        name="nombre"
-        type="name"
-        id="defaultNameForm"
-        class="form-control mb-4"
-        placeholder="Nombre"
-        required
-      />
-      <!-- Categoría -->
-      <label for="defaultNameForm">Categoría:</label>
+        <input
+          formControlName="nombre"
+          type="name"
+          id="defaultNameForm"
+          class="form-control"
+          placeholder="Nombre"
+        />
+        <span class="form-text text-danger mb-0" *ngIf="fieldIsValid('nombre')"
+          >El nombre debe tener al menos 3 letras</span
+        >
+      </div>
+      <div class="mb-4">
+        <!-- Categoría -->
+        <label for="defaultNameForm">Categoría:</label>
 
-      <input
-        ngModel
-        name="categoria"
-        type="text"
-        id="defaultCategoryForm"
-        class="form-control mb-4"
-        placeholder="Categoría"
-        required
-      />
+        <input
+          formControlName="categoria"
+          type="text"
+          id="defaultCategoryForm"
+          class="form-control"
+          placeholder="Categoría"
+          required
+        />
+        <span
+          class="form-text text-danger mb-0"
+          *ngIf="fieldIsValid('categoria')"
+          >La categoría debe tener al menos 3 letras</span
+        >
+      </div>
 
       <!-- Tipo -->
       <label for="defaultNameForm">Tipo:</label>
 
       <select
-        ngModel
-        name="tipo"
+        formControlName="tipo"
         type="number"
         id="defaultTipoForm"
         class="form-control mb-4"
@@ -50,8 +61,7 @@
       <label for="defaultNameForm">Valoración:</label>
 
       <select
-        ngModel
-        name="valoracion"
+        formControlName="valoracion"
         type="number"
         id="defaultValorationForm"
         class="form-control mb-4"
@@ -70,8 +80,8 @@
       <button
         type="submit"
         class="btn btn-primary my-4"
-        [disabled]="formulario.invalid"
         (click)="modal.close('Close click')"
+        [disabled]="languageFormData.invalid"
       >
         Añadir
       </button>
@@ -86,6 +96,12 @@
   </form>
 </ng-template>
 
-<button class="btn btn-lg btn-outline-primary" (click)="open(content)">
-  Abrir modal
-</button>
+<button
+  pButton
+  type="button"
+  icon="pi pi-plus"
+  label="Añadir"
+  iconPos="left"
+  class="p-button-info p-button-raised"
+  (click)="open(content)"
+></button>
