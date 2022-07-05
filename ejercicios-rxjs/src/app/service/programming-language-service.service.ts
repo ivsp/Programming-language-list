@@ -1,6 +1,16 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
-import { datosIniciales } from '../common/data';
-import { Language } from '../programming-languages/interfaces/interfaces';
+import {
+  categorias,
+  datosIniciales,
+  tipos,
+  valoraciones,
+} from '../common/data';
+import {
+  Category,
+  Language,
+  Type,
+  Valoration,
+} from '../programming-languages/interfaces/interfaces';
 import { Observable, filter, BehaviorSubject, map, tap } from 'rxjs';
 
 @Injectable({
@@ -19,7 +29,9 @@ export class ProgrammingLanguageService {
   private _typeValue!: string;
   private _valorationValue!: string;
   private _languageSubject = new BehaviorSubject<Language[]>(this._languages);
-
+  private _aviableCategories: Category[] = categorias;
+  private _aviableTypes: Type[] = tipos;
+  private _aviableValoration: Array<string> = [];
   /**
    * Creo un get para mandar la información de los lenguajes
    * ya que no quiero que estos lenguajes se puedan manipular desde ningun
@@ -41,7 +53,19 @@ export class ProgrammingLanguageService {
         });
         return this._filterLanguages;
       }),
-      //2º de los datos obtenidos recoger los valores para mandarselos al componente dentro de un tap()
+      //2º de los datos obtenidos recoger los valores para mandarselos al componente
+      tap((languages) => {
+        let newCategories: Category[] = [];
+        let newTypes: Type[] = [];
+        languages.map((language) => {
+          console.log(language);
+          //guardo en un array las categorias disponibles y lo asigno al _aviableCategories
+          newCategories.push({ categoria: language.categoria });
+          newTypes.push({ tipo: language.tipo });
+        });
+        this._aviableCategories = newCategories;
+        this._aviableTypes = newTypes;
+      }),
       //3º el filtro de los selectores realizaremos otro map()
       map((language) => {
         if (!this._categoryValue || !this._categoryValue.length) {
@@ -63,7 +87,7 @@ export class ProgrammingLanguageService {
         return this._filterLanguages;
       }),
       tap(() => {
-        console.log('DEntro del subject', this._valorationValue);
+        console.log('Dentro del subject', this._valorationValue);
       }),
       map((language) => {
         if (!this._valorationValue || !isNaN(parseInt(this._typeValue))) {
@@ -80,6 +104,12 @@ export class ProgrammingLanguageService {
     );
   }
 
+  get aviableCategories(): Category[] {
+    return this._aviableCategories;
+  }
+  get aviableTypes(): Type[] {
+    return this._aviableTypes;
+  }
   get filteredLanguages(): Language[] {
     return [...this._filterLanguages];
   }

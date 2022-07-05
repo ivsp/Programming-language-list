@@ -4,7 +4,7 @@ import { NgForm } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { categorias, tipos, valoraciones } from 'src/app/common/data';
 import { ProgrammingLanguageService } from 'src/app/service/programming-language-service.service';
-import { Categoria, Tipo, Valoracion } from '../../interfaces/interfaces';
+import { Category, Type, Valoration } from '../../interfaces/interfaces';
 
 @Component({
   selector: 'app-add-language-modal',
@@ -15,9 +15,9 @@ import { Categoria, Tipo, Valoracion } from '../../interfaces/interfaces';
 export class AddLanguageModalComponent implements OnInit {
   closeResult = '';
 
-  public categorias: Categoria[] = categorias;
-  public tipos: Tipo[] = tipos;
-  public valoraciones: Valoracion[] = valoraciones;
+  public categorias: Category[] = categorias;
+  public tipos: Type[] = tipos;
+  public valoraciones: Valoration[] = valoraciones;
 
   constructor(
     private modalService: NgbModal,

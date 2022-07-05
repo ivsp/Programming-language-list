@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ProgrammingLanguageService } from '../../../service/programming-language-service.service';
-import { Language, Valoracion } from '../../interfaces/interfaces';
+import { Language, Valoration } from '../../interfaces/interfaces';
 import { fromEvent, Observable } from 'rxjs';
 import { valoraciones } from 'src/app/common/data';
 
@@ -21,7 +21,7 @@ export class TableComponent implements OnInit {
 
   languages$!: Observable<Language[]>;
 
-  values: Valoracion[] = valoraciones;
+  values: Valoration[] = valoraciones;
   constructor(private languageService: ProgrammingLanguageService) {}
 
   //Creo un observable que emite valores y se suscribe a cada valor

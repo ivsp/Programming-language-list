@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs';
-import { Categoria, Tipo, Valoracion } from '../../interfaces/interfaces';
+import { Category, Type, Valoration } from '../../interfaces/interfaces';
 import { categorias, tipos, valoraciones } from 'src/app/common/data';
 import { ProgrammingLanguageService } from 'src/app/service/programming-language-service.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -12,15 +12,21 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   styleUrls: ['./filter.component.css'],
 })
 export class FilterComponent implements OnInit {
-  public categorias: Categoria[] = categorias;
-  public tipos: Tipo[] = tipos;
-  public valoraciones: Valoracion[] = valoraciones;
+  public categorias!: Category[];
+  public tipos!: Type[];
+  public valoraciones: Valoration[] = valoraciones;
   form!: FormGroup;
 
   constructor(
     private languageService: ProgrammingLanguageService,
     private readonly builder: FormBuilder
   ) {}
+
+  /**
+   * Para crear el array de categorias y de tipos necesito un
+   * observable al que suscribirme cada vez que este array cambia de valor
+   * y hacer la suscripcion en el html con el pipe async
+   */
 
   openModal() {
     console.log('open modal');
@@ -98,5 +104,18 @@ export class FilterComponent implements OnInit {
           this.form.get('valorationSelect')?.value
         );
       });
+  }
+
+  //Función que resetea los valores del formulario y que por consecuencia,
+  //realiza la subcripción a los observables que cambian de valor, restaurando la lista inicial de datos.
+  reset(): void {
+    console.log(this.form.value);
+    this.form.reset({
+      search: '',
+      categorySelect: '',
+      typeSelect: '',
+      valorationSelect: '',
+    });
+    console.log(this.form.value);
   }
 }

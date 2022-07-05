@@ -1,11 +1,11 @@
 import {
-  Categoria,
+  Category,
   Language,
-  Tipo,
-  Valoracion,
+  Type,
+  Valoration,
 } from '../programming-languages/interfaces/interfaces';
 
-export const categorias: Categoria[] = [
+export const categorias: Category[] = [
   { categoria: 'Front' },
   { categoria: 'Backend' },
   { categoria: 'Mobile' },
@@ -13,9 +13,9 @@ export const categorias: Categoria[] = [
   { categoria: 'Scripting' },
 ];
 
-export const tipos: Tipo[] = [{ tipo: 'Tipado' }, { tipo: 'No Tipado' }];
+export const tipos: Type[] = [{ tipo: 'Tipado' }, { tipo: 'No Tipado' }];
 
-export const valoraciones: Valoracion[] = [
+export const valoraciones: Valoration[] = [
   { valoracion: 1, descripcion: 'mayor que 1' },
   { valoracion: 2, descripcion: 'mayor que 2' },
   { valoracion: 3, descripcion: 'mayor que 3' },

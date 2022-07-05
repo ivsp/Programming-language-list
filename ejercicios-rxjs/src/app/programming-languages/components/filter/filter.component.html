@@ -74,7 +74,7 @@
 
       </div>
     </div> -->
-    <span class="p-input-icon-right">
+    <span class="p-input-icon-right d-flex align-items-center">
       <i class="pi pi-arrow-circle-down"></i>
       <select
         ngModel
@@ -85,7 +85,6 @@
         formControlName="valorationSelect"
         required
       >
-        <i class="bi bi-arrow-down-short"></i>
         <option value="" disabled selected>Valoración</option>
         <option [value]="0" selected>Todos</option>
         <option
@@ -96,5 +95,13 @@
         </option>
       </select>
     </span>
+    <button
+      (click)="reset()"
+      type="button"
+      class="btn btn-outline-danger"
+      style="height: 2.5rem"
+    >
+      Restablecer Filtros
+    </button>
   </div>
 </section>
