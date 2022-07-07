@@ -9,6 +9,7 @@ import {
   Category,
   Language,
   Type,
+  Valoration,
 } from '../programming-languages/interfaces/interfaces';
 import { Observable, BehaviorSubject, map, tap } from 'rxjs';
 
@@ -20,7 +21,6 @@ export class ProgrammingLanguageService {
     localStorage.getItem('lenguajes') !== null
       ? JSON.parse(localStorage.getItem('lenguajes')!)
       : datosIniciales;
-  private _filterLanguages: Language[] = this._languages;
   private _id: number =
     this._languages.length === 0 ? 1 : this._languages.length + 1;
   private _searchValue!: string;
@@ -28,9 +28,19 @@ export class ProgrammingLanguageService {
   private _typeValue!: string;
   private _valorationValue!: string;
   private _languageSubject = new BehaviorSubject<Language[]>(this._languages);
-  private _aviableCategories: Category[] = categorias;
-  private _aviableTypes: Type[] = tipos;
-  private _aviableValoration: Array<string> = [];
+  private _aviableCategoriesSubject = new BehaviorSubject<Category[]>(
+    categorias
+  );
+  private _filterCategories: Category[] = [];
+
+  private _aviableTypeSubject = new BehaviorSubject<Type[]>(tipos);
+  private _filterTypes: Type[] = [];
+
+  private _aviableValorationsSubject = new BehaviorSubject<Valoration[]>(
+    valoraciones
+  );
+  private _filterValorations: Valoration[] = [];
+
   /**
    * Creo un get para mandar la información de los lenguajes
    * ya que no quiero que estos lenguajes se puedan manipular desde ningun
@@ -46,7 +56,6 @@ export class ProgrammingLanguageService {
         if (!this._searchValue || !this._searchValue.length) {
           return languages;
         }
-
         return languages.filter((language) => {
           return `${language.nombre} ${language.categoria} ${language.tipo}`
             .toLowerCase()
@@ -54,18 +63,62 @@ export class ProgrammingLanguageService {
         });
       }),
       //2º de los datos obtenidos recoger los valores para mandarselos al componente
-      tap((languages) => {
-        let newCategories: Category[] = [];
-        let newTypes: Type[] = [];
-        languages.map((language) => {
-          //guardo en un array las categorias disponibles y lo asigno al _aviableCategories
-          newCategories.push({ categoria: language.categoria });
-          newTypes.push({ tipo: language.tipo });
-        });
-        this._aviableCategories = newCategories;
-        this._aviableTypes = newTypes;
-      }),
+      tap(
+        //aqui dentro compruebo las categorias que hay dentro del array filtrado y las emito
+        //como nuevo valor del observable de _aviableCategoriesSubject
+        //Hago lo mismo para los tipos y las valoraciones
+        (languages) => {
+          this._filterCategories = [];
+          this._filterTypes = [];
+          this._filterValorations = [];
+          const sortLanguageByValoration = languages.sort(function (a, b) {
+            if (a.valoracion > b.valoracion) {
+              return -1;
+            }
+            if (a.valoracion < b.valoracion) {
+              return 1;
+            }
+            // a must be equal to b
+            return 0;
+          });
+          languages.forEach((language) => {
+            const matchCategory = this._filterCategories.find(
+              (category) => language.categoria === category.categoria
+            );
+            const matchType = this._filterTypes.find(
+              (type) => language.tipo === type.tipo
+            );
+            const matchValoration = this._filterValorations.find(
+              () =>
+                language.valoracion <= sortLanguageByValoration[0].valoracion
+            );
+            if (matchCategory === undefined) {
+              this._filterCategories.push({
+                categoria: language.categoria,
+              });
+            }
+            if (matchType === undefined) {
+              this._filterTypes.push({
+                tipo: language.tipo,
+              });
+            }
+            if (matchValoration === undefined) {
+              //hago un for para hacer el push desde 0 hasta el valor del lenguaje
+              for (let i = 0; i < language.valoracion; i++) {
+                this._filterValorations.push({
+                  valoracion: i + 1,
+                  descripcion: `mayor o igual a ${i + 1}`,
+                });
+              }
+            }
+            this._aviableCategoriesSubject.next(this._filterCategories);
+            this._aviableTypeSubject.next(this._filterTypes);
+            this._aviableValorationsSubject.next(this._filterValorations);
+          });
+        }
+      ),
       //3º el filtro de los selectores realizaremos otro map()
+      //puedo hacer el filtrado de los selectores en el mismo map
       map((languages) => {
         if (!this._categoryValue || !this._categoryValue.length) {
           return languages;
@@ -74,6 +127,60 @@ export class ProgrammingLanguageService {
           return language.categoria === this._categoryValue;
         });
       }),
+      tap(
+        //aqui dentro compruebo las categorias que hay dentro del array filtrado y las emito
+        //como nuevo valor del observable de _aviableCategoriesSubject
+        //Hago lo mismo para los tipos y las valoraciones
+        (languages) => {
+          this._filterCategories = [];
+          this._filterTypes = [];
+          this._filterValorations = [];
+          const sortLanguageByValoration = languages.sort(function (a, b) {
+            if (a.valoracion > b.valoracion) {
+              return -1;
+            }
+            if (a.valoracion < b.valoracion) {
+              return 1;
+            }
+            // a must be equal to b
+            return 0;
+          });
+          languages.forEach((language) => {
+            const matchCategory = this._filterCategories.find(
+              (category) => language.categoria === category.categoria
+            );
+            const matchType = this._filterTypes.find(
+              (type) => language.tipo === type.tipo
+            );
+            const matchValoration = this._filterValorations.find(
+              () =>
+                language.valoracion <= sortLanguageByValoration[0].valoracion
+            );
+            if (matchCategory === undefined) {
+              this._filterCategories.push({
+                categoria: language.categoria,
+              });
+            }
+            if (matchType === undefined) {
+              this._filterTypes.push({
+                tipo: language.tipo,
+              });
+            }
+            if (matchValoration === undefined) {
+              //hago un for para hacer el push desde 0 hasta el valor del lenguaje
+              for (let i = 0; i < language.valoracion; i++) {
+                this._filterValorations.push({
+                  valoracion: i + 1,
+                  descripcion: `mayor o igual a ${i + 1}`,
+                });
+              }
+            }
+            this._aviableCategoriesSubject.next(this._filterCategories);
+            this._aviableTypeSubject.next(this._filterTypes);
+            this._aviableValorationsSubject.next(this._filterValorations);
+          });
+        }
+      ),
       //repetir los pasos 2 y 3 tantas veces como filtros de selectores haya
       map((languages) => {
         if (!this._typeValue || !this._typeValue.length) {
@@ -83,29 +190,188 @@ export class ProgrammingLanguageService {
           return language.tipo === this._typeValue;
         });
       }),
-      tap(() => {
-        //console.log('Dentro del subject', this._valorationValue);
-      }),
+      tap(
+        //aqui dentro compruebo las categorias que hay dentro del array filtrado y las emito
+        //como nuevo valor del observable de _aviableCategoriesSubject
+        //Hago lo mismo para los tipos y las valoraciones
+        (languages) => {
+          this._filterCategories = [];
+          this._filterTypes = [];
+          this._filterValorations = [];
+          const sortLanguageByValoration = languages.sort(function (a, b) {
+            if (a.valoracion > b.valoracion) {
+              return -1;
+            }
+            if (a.valoracion < b.valoracion) {
+              return 1;
+            }
+            // a must be equal to b
+            return 0;
+          });
+          languages.forEach((language) => {
+            const matchCategory = this._filterCategories.find(
+              (category) => language.categoria === category.categoria
+            );
+            const matchType = this._filterTypes.find(
+              (type) => language.tipo === type.tipo
+            );
+            const matchValoration = this._filterValorations.find(
+              () =>
+                language.valoracion <= sortLanguageByValoration[0].valoracion
+            );
+            if (matchCategory === undefined) {
+              this._filterCategories.push({
+                categoria: language.categoria,
+              });
+            }
+            if (matchType === undefined) {
+              this._filterTypes.push({
+                tipo: language.tipo,
+              });
+            }
+            if (matchValoration === undefined) {
+              //hago un for para hacer el push desde 0 hasta el valor del lenguaje
+              for (let i = 0; i < language.valoracion; i++) {
+                this._filterValorations.push({
+                  valoracion: i + 1,
+                  descripcion: `mayor o igual a ${i + 1}`,
+                });
+              }
+            }
+            this._aviableCategoriesSubject.next(this._filterCategories);
+            this._aviableTypeSubject.next(this._filterTypes);
+            this._aviableValorationsSubject.next(this._filterValorations);
+          });
+        }
+      ),
       map((languages) => {
         if (!this._valorationValue || !isNaN(parseInt(this._typeValue))) {
           return languages;
         }
-        this._filterLanguages = languages.filter((language) => {
+        //this._filterLanguages =
+        return languages.filter((language) => {
           return language.valoracion >= parseInt(this._valorationValue);
         });
-        return this._filterLanguages;
-      })
+      }),
+      tap(
+        //aqui dentro compruebo las categorias que hay dentro del array filtrado y las emito
+        //como nuevo valor del observable de _aviableCategoriesSubject
+        //Hago lo mismo para los tipos y las valoraciones
+        (languages) => {
+          this._filterCategories = [];
+          this._filterTypes = [];
+          this._filterValorations = [];
+          const sortLanguageByValoration = languages.sort(function (a, b) {
+            if (a.valoracion > b.valoracion) {
+              return -1;
+            }
+            if (a.valoracion < b.valoracion) {
+              return 1;
+            }
+            // a must be equal to b
+            return 0;
+          });
+          languages.forEach((language) => {
+            const matchCategory = this._filterCategories.find(
+              (category) => language.categoria === category.categoria
+            );
+            const matchType = this._filterTypes.find(
+              (type) => language.tipo === type.tipo
+            );
+            const matchValoration = this._filterValorations.find(
+              () =>
+                language.valoracion <= sortLanguageByValoration[0].valoracion
+            );
+            if (matchCategory === undefined) {
+              this._filterCategories.push({
+                categoria: language.categoria,
+              });
+            }
+            if (matchType === undefined) {
+              this._filterTypes.push({
+                tipo: language.tipo,
+              });
+            }
+            if (matchValoration === undefined) {
+              //hago un for para hacer el push desde 0 hasta el valor del lenguaje
+              for (let i = 0; i < language.valoracion; i++) {
+                this._filterValorations.push({
+                  valoracion: i + 1,
+                  descripcion: `mayor o igual a ${i + 1}`,
+                });
+              }
+            }
+            this._aviableCategoriesSubject.next(this._filterCategories);
+            this._aviableTypeSubject.next(this._filterTypes);
+            this._aviableValorationsSubject.next(this._filterValorations);
+          });
+        }
+      )
+
+      //cabecera y paginación
+
+      /**
+       *1. para la cabecerá deberé crear una función que indique la cabecerá tocada
+       *y el orden de esta cabecera. Esta función gestionará los valores de ordenación
+       *y ejecutará la función refresh() para emitir nuevos valores del observable
+       *ahora, dentro de un map ejecuto la función sort y realizo la ordenación con los
+       *parámetros establecidos.
+       *NOTA: Recordar que el boton de restablecer filtros debe ordenar por defecto en orden ascendente
+       *y por id
+       */
     );
   }
 
-  get aviableCategories(): Category[] {
-    return this._aviableCategories;
+  get aviableCategories$(): Observable<Category[]> {
+    return this._aviableCategoriesSubject.asObservable();
+    /** TODA LA LOGICA SE EJECUTA DENTRO DEL PIPE PRINCIPAL
+     *
+     *  .pipe(
+       tap((cat) => console.log('en el map del get', cat)!),
+       map((categories) => {
+         this._filterCategories = [];
+         console.log('Lenguajes filtrados', this._filterLanguages);
+         console.log('categorias iniciales', categories);
+         console.log('categorias filtradas', this._filterCategories);
+         this._filterLanguages.forEach((language) => {
+           console.log('lenguaje a evaluar', language);
+           const value = this._filterCategories.find(
+             (category) => language.categoria === category.categoria
+           );
+           if (value === undefined) {
+             this._filterCategories.push({
+               categoria: language.categoria,
+             });
+           }
+         });
+
+         return this._filterCategories;
+       })
+     );
+     */
   }
-  get aviableTypes(): Type[] {
-    return this._aviableTypes;
+
+  get aviableTypes$(): Observable<Type[]> {
+    return this._aviableTypeSubject.asObservable();
+    /** TODA LA LOGICA SE EJECUTA DENTRO DEL PIPE PRINCIPAL
+     * .pipe(
+      map((types) => {
+        this._filterTypes = [];
+        this._filterLanguages.forEach((language) => {
+          const value = this._filterTypes.find(
+            (type) => language.tipo === type.tipo
+          );
+          if (value === undefined) {
+            this._filterTypes.push({ tipo: language.tipo });
+          }
+        });
+        return this._filterTypes;
+      })
+    );
+     */
   }
-  get filteredLanguages(): Language[] {
-    return [...this._filterLanguages];
+  get aviableValorations$(): Observable<Valoration[]> {
+    return this._aviableValorationsSubject.asObservable();
   }
 
   @Output() openModal: EventEmitter<any> = new EventEmitter();
@@ -120,15 +386,14 @@ export class ProgrammingLanguageService {
     this._languages = [...this._languages, dataForm];
     this._id++;
     localStorage.setItem('lenguajes', JSON.stringify(this._languages));
-    this.refresh();
+    this.refreshLanguages();
   }
 
   filterLanguagesByName(inputData: string) {
     //función que ejecutará una función de refresco, que hará que el observable emita un nuevo valor y devolverá el input
     this._searchValue = inputData;
-    this.refresh();
+    this.refreshLanguages();
   }
-
   /**
   *  filterLanguages(
     search: string,
@@ -167,7 +432,7 @@ export class ProgrammingLanguageService {
     } else {
       this._categoryValue = category;
     }
-    this.refresh();
+    this.refreshLanguages();
   }
 
   filterType(type: string) {
@@ -176,64 +441,88 @@ export class ProgrammingLanguageService {
     } else {
       this._typeValue = type;
     }
-    this.refresh();
+    this.refreshLanguages();
   }
 
   filterValoration(valoration: string) {
     this._valorationValue = valoration;
-    this.refresh();
+    this.refreshLanguages();
   }
 
   sortByName(order: boolean) {
-    this._filterLanguages = this._filterLanguages.sort(function (a, b) {
-      if (order) {
-        if (a.nombre > b.nombre) {
-          return 1;
-        }
-        if (a.nombre < b.nombre) {
-          return -1;
-        }
-        // a must be equal to b
-        return 0;
-      } else {
-        if (a.nombre > b.nombre) {
-          return -1;
-        }
-        if (a.nombre < b.nombre) {
-          return 1;
-        }
-        // a must be equal to b
-        return 0;
-      }
-    });
+    /**
+    *  this._languageSubject
+      .asObservable()
+      .pipe(
+        map((languages) => {
+          console.log(languages);
+          languages.sort(function (a, b) {
+            if (order) {
+              if (a.nombre > b.nombre) {
+                return 1;
+              }
+              if (a.nombre < b.nombre) {
+                return -1;
+              }
+              // a must be equal to b
+              return 0;
+            } else {
+              if (a.nombre > b.nombre) {
+                return -1;
+              }
+              if (a.nombre < b.nombre) {
+                return 1;
+              }
+              // a must be equal to b
+              return 0;
+            }
+          });
+          this._filterLanguages = languages;
+          return this._filterLanguages;
+        })
+      )
+      .subscribe();
+    */
   }
 
   sortByCategory(order: boolean) {
-    this._filterLanguages = this._filterLanguages.sort(function (a, b) {
-      if (order) {
-        if (a.categoria > b.categoria) {
-          return 1;
-        }
-        if (a.categoria < b.categoria) {
-          return -1;
-        }
-        // a must be equal to b
-        return 0;
-      } else {
-        if (a.categoria > b.categoria) {
-          return -1;
-        }
-        if (a.categoria < b.categoria) {
-          return 1;
-        }
-        // a must be equal to b
-        return 0;
-      }
-    });
+    /**
+    *  this._languageSubject
+      .asObservable()
+      .pipe(
+        map((languages) => {
+          console.log(languages);
+
+          languages.sort(function (a, b) {
+            if (order) {
+              if (a.categoria > b.categoria) {
+                return 1;
+              }
+              if (a.categoria < b.categoria) {
+                return -1;
+              }
+              // a must be equal to b
+              return 0;
+            } else {
+              if (a.categoria > b.categoria) {
+                return -1;
+              }
+              if (a.categoria < b.categoria) {
+                return 1;
+              }
+              // a must be equal to b
+              return 0;
+            }
+          });
+        })
+      )
+      .subscribe();
+    */
   }
 
   sortByType(order: boolean) {
-    this._filterLanguages = this._filterLanguages.sort(function (a, b) {
+    /**
+    *  this._filterLanguages = this._filterLanguages.sort(function (a, b) {
       if (order) {
         if (a.tipo > b.tipo) {
           return 1;
@@ -254,10 +543,12 @@ export class ProgrammingLanguageService {
         return 0;
       }
     });
+    */
   }
 
   sortByValoration(order: boolean) {
-    this._filterLanguages = this._filterLanguages.sort(function (a, b) {
+    /**
+    *  this._filterLanguages = this._filterLanguages.sort(function (a, b) {
       if (order) {
         if (a.valoracion > b.valoracion) {
           return 1;
@@ -278,9 +569,66 @@ export class ProgrammingLanguageService {
         return 0;
       }
     });
+    */
   }
 
-  refresh() {
+  refreshLanguages() {
     return this._languageSubject.next(this._languages);
   }
 }
+
+/**
+ *
+ *
+ * this._filterCategories = [];
+          console.log(
+            'Filtradas despues de igualar a []',
+            this._filterCategories
+          );
+          let newTypes: Type[] = [];
+          console.log('Lenguajes iniciales', languages);
+          languages.map((language, i) => {
+            console.log(`lenguaje ${i}:`, language);
+          });
+ *  //tengo que hacer e push si y solo si el lenguaje no existe en la lista de lenguajes
+            //cada vez que pase por aquí debo suscribirme al observable _aviableCategoriesSubject
+            // y actualizar estos datos
+            //en el HTML recibo estos observables y me susbribo a ellos con el pipe async
+            this._aviableCategoriesSubject
+              .asObservable()
+              .pipe(
+                map((categories, j) => {
+                  console.log('categorias iniciales', categories);
+                  console.log('categorias filtradas', this._filterCategories);
+                  const value = this._filterCategories.find(
+                    (c) => language.categoria === c.categoria
+                  );
+                  console.log('Valor buscado', value);
+                  if (value === undefined) {
+                    this._filterCategories.push({
+                      categoria: language.categoria,
+                    });
+                  }
+                  //si entramos aqui es que hemos hecho match
+                  //debemos crear un nuevo array con los lenguajes
+                  //debemos agregar las categorias de estos lenguajes a
+                  //un nuevo array de newCategories siempre y cuando estas categorias
+                  //no se repitan.
+                  //Debemos emitir este array y hacer el subscribe en el html
+                  console.log(`vuelta ${i} del map`);
+                  console.log(`vuelta ${j} del find`);
+                  console.log(`categoria ${j}:`, language.categoria);
+                  console.log(
+                    'nuevo array de categorias',
+                    this._filterCategories
+                  );
+
+                  return this._filterCategories;
+                })
+              )
+              .subscribe((categories) =>
+                console.log('en el subscribe del servicio', categories)
+              );
+ *
+ *
+ */
