@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import {
   Category,
@@ -15,13 +15,25 @@ import { ProgrammingLanguageService } from 'src/app/service/programming-language
 })
 export class InputFilterComponent implements OnInit {
   @Input() form!: FormGroup;
-  @Output() onNewSearchValue: EventEmitter<string> = new EventEmitter();
+  //@Output() onNewSearchValue: EventEmitter<string> = new EventEmitter();
 
-  constructor() {}
+  constructor(private languageService: ProgrammingLanguageService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.form
+      .get('search')
+      ?.valueChanges.pipe(
+        distinctUntilChanged(),
+        debounceTime(1000),
+        filter((value) => !value || value.length >= 3 || value.length === 0)
+      )
+      .subscribe((value) => {
+        this.languageService.filterLanguagesByName(value);
+      });
+  }
 
-  newInput(): string {
-    return this.form.get('search')?.value;
+  newInput(value: any) {
+    console.log(value);
+    // return this.form.get('search')?.value;
   }
 }

@@ -12,7 +12,7 @@
       <option value="" disabled selected>Categorías</option>
       <option value="Todos" selected>Todos</option>
       <option
-        *ngFor="let categoria of categorias"
+        *ngFor="let categoria of aviableCategories$ | async"
         value="{{ categoria.categoria }}"
       >
         {{ categoria.categoria }}
@@ -31,7 +31,10 @@
     >
       <option value="" disabled selected>Tipo</option>
       <option value="Todos" selected>Todos</option>
-      <option *ngFor="let tipo of tipos" value="{{ tipo.tipo }}">
+      <option
+        *ngFor="let tipo of aviableTypes$ | async"
+        value="{{ tipo.tipo }}"
+      >
         {{ tipo.tipo }}
       </option>
     </select>
@@ -64,7 +67,7 @@
       <option value="" disabled selected>Valoración</option>
       <option [value]="0" selected>Todos</option>
       <option
-        *ngFor="let valoracion of valoraciones"
+        *ngFor="let valoracion of aviableValorations$ | async"
         [value]="valoracion.valoracion"
       >
         {{ valoracion.descripcion }}

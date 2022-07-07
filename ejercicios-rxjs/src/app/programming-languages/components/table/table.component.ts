@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ProgrammingLanguageService } from '../../../service/programming-language-service.service';
 import { Language, Valoration } from '../../interfaces/interfaces';
-import { fromEvent, Observable } from 'rxjs';
+import { fromEvent, Observable, tap } from 'rxjs';
 import { valoraciones } from 'src/app/common/data';
 
 @Component({
@@ -36,11 +36,13 @@ export class TableComponent implements OnInit {
       .pipe()
       .subscribe(() => {
         this.languageService.sortByName(order);
+        console.log('ordenar descendente', order);
       });
   }
 
   sortDataByCategory(order: boolean) {
-    fromEvent(this.categoryFieldAsc.nativeElement, 'click')
+    /**
+    *  fromEvent(this.categoryFieldAsc.nativeElement, 'click')
       .pipe()
       .subscribe(() => {
         this.languageService.sortByCategory(order);
@@ -49,11 +51,14 @@ export class TableComponent implements OnInit {
       .pipe()
       .subscribe(() => {
         this.languageService.sortByCategory(order);
+        console.log('ordenar descendente', order);
       });
+    */
   }
 
   sortDataByType(order: boolean) {
-    fromEvent(this.typeFieldAsc.nativeElement, 'click')
+    /**
+  *    fromEvent(this.typeFieldAsc.nativeElement, 'click')
       .pipe()
       .subscribe(() => {
         this.languageService.sortByType(order);
@@ -63,10 +68,12 @@ export class TableComponent implements OnInit {
       .subscribe(() => {
         this.languageService.sortByType(order);
       });
+  */
   }
 
   sortDataByValoration(order: boolean) {
-    fromEvent(this.valueFieldAsc.nativeElement, 'click')
+    /**
+    *  fromEvent(this.valueFieldAsc.nativeElement, 'click')
       .pipe()
       .subscribe(() => {
         this.languageService.sortByValoration(order);
@@ -76,6 +83,7 @@ export class TableComponent implements OnInit {
       .subscribe(() => {
         this.languageService.sortByValoration(order);
       });
+    */
   }
 
   ngOnInit(): void {
